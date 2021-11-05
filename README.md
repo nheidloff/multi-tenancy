@@ -4,7 +4,7 @@
 
 
 
-[Create Catalog Service on Code Engine](https://cloud.ibm.com/devops/setup/deploy?repository=https%3A%2F%2Fgithub.com%2Fnheidloff%2multi-tenancy)
+[Create Catalog Service on Code Engine](https://cloud.ibm.com/devops/setup/deploy?repository=https://github.com/nheidloff/multi-tenancy)
 
 
 
