@@ -38,7 +38,7 @@ services:
         } else if ($env.template.info.hosted_region === "") {
           'https://github.com/nheidloff/multi-tenancy'
         } else {
-          'https://{{template.info.hosted_region}}.git.cloud.ibm.com/open-toolchain/hello-helm'
+          'https://{{template.info.hosted_region}}.git.cloud.ibm.com/nheidloff/multi-tenancy'
         }
       source_repo_url: >
         if ($env.type === 'fork' || $env.type === 'clone') {
@@ -96,12 +96,7 @@ services:
           API_KEY: '{{form.pipeline.parameters.api-key}}'
           APP_NAME: "{{form.pipeline.parameters.app-name}}"
           APP_REPO: repo
-          APP_REPO_BRANCH: >
-            if ($env.template.info.hosted_region === "" || $env.sourceZipUrl) {
-              'master'
-            } else {
-              'main'
-            }
+          APP_REPO_BRANCH: 'main'
           ARTIFACTORY_DOCKER_CONFIG_JSON: '{{form.artifactoryComp.parameters.docker_config_json}}'
           GIT_COMMIT_EVENT_LISTENER_NAME: >
             if ( $env.source_provider === 'githubconsolidated' ) {
@@ -125,21 +120,12 @@ services:
           PIPELINE_REPO_BRANCH: >
             if ($env.branch) {
               $env.branch
-            } else if ($env.template.info.hosted_region === "") {
-              'master'
-            } else {
-              'main'
-            }
+            } else 'main'
           PRIVATE_WORKER: '{{services.privateWorker.parameters.name}}'
           REGISTRY_REGION_ID: "{{form.pipeline.parameters.registry-region}}"
           REGISTRY_NAMESPACE: "{{form.pipeline.parameters.registry-namespace}}"
           TEKTON_CATALOG_REPO: tekton-catalog-repo
-          TEKTON_CATALOG_REPO_BRANCH: >
-            if ($env.template.info.hosted_region === "") {
-              'master'
-            } else {
-              'main'
-            }
+          TEKTON_CATALOG_REPO_BRANCH: 'main'
         execute: false
   build:
     service_id: pipeline
@@ -156,12 +142,7 @@ services:
           API_KEY: '{{form.pipeline.parameters.api-key}}'
           APP_NAME: '{{form.pipeline.parameters.app-name}}'
           APP_REPO: repo
-          APP_REPO_BRANCH: >
-            if ($env.template.info.hosted_region === "" || $env.sourceZipUrl) {
-              'master'
-            } else {
-              'main'
-            }
+          APP_REPO_BRANCH: 'main'
           CODE_ENGINE_PROJECT: '{{form.pipeline.parameters.code-engine-project}}'
           CODE_ENGINE_REGION: '{{form.pipeline.parameters.code-engine-region}}'
           CODE_ENGINE_RESOURCE_GROUP: '{{form.pipeline.parameters.code-engine-resource-group}}'
@@ -187,21 +168,12 @@ services:
           PIPELINE_REPO_BRANCH: >
             if ($env.branch) {
               $env.branch
-            } else if ($env.template.info.hosted_region === "") {
-              'master'
-            } else {
-              'main'
-            }
+            } else 'main'
           REGISTRY_NAMESPACE: '{{form.pipeline.parameters.registry-namespace}}'
           REGISTRY_REGION_ID: '{{form.pipeline.parameters.registry-region}}'
           SERVICE_BINDINGS: '{{form.pipeline.parameters.service-bindings}}'
           TEKTON_CATALOG_REPO: tekton-catalog-repo
-          TEKTON_CATALOG_REPO_BRANCH: >
-            if ($env.template.info.hosted_region === "") {
-              'master'
-            } else {
-              'main'
-            }
+          TEKTON_CATALOG_REPO_BRANCH: 'main'
         execute: 'manual-run'
   devops-insights:
       service_id: 'draservicebroker'
