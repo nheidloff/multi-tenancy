@@ -36,7 +36,7 @@ services:
         } else if ($env.sourceZipUrl) {
           $env.sourceZipUrl
         } else if ($env.template.info.hosted_region === "") {
-          'https://github.com/open-toolchain/hello-helm'
+          'https://github.com/nheidloff/multi-tenancy'
         } else {
           'https://{{template.info.hosted_region}}.git.cloud.ibm.com/open-toolchain/hello-helm'
         }
@@ -46,9 +46,9 @@ services:
         } else if ($env.sourceZipUrl) {
           $env.sourceZipUrl
         } else if ($env.template.info.hosted_region === "") {
-          'https://github.com/open-toolchain/hello-helm'
+          'https://github.com/nheidloff/multi-tenancy'
         } else {
-          'https://{{template.info.hosted_region}}.git.cloud.ibm.com/open-toolchain/hello-helm'
+          'https://{{template.info.hosted_region}}.git.cloud.ibm.com/nheidloff/multi-tenancy'
         }
       type: $env.type || 'clone'
       has_issues: true
