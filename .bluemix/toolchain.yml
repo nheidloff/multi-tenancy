@@ -138,7 +138,7 @@ services:
             if ($env.template.info.hosted_region === "") {
               'master'
             } else {
-              'main'
+              'master'
             }
         execute: false
   build:
