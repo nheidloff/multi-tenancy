@@ -136,7 +136,7 @@ services:
           TEKTON_CATALOG_REPO: tekton-catalog-repo
           TEKTON_CATALOG_REPO_BRANCH: >
             if ($env.template.info.hosted_region === "") {
-              'main'
+              'master'
             } else {
               'main'
             }
