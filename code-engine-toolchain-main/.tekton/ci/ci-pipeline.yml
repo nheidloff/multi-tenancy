@@ -12,7 +12,7 @@ spec:
       default: ""
     - name: branch
       description: the branch for the git repo
-      default: "main"
+      default: "master"
     - name: revision
       description: the git revision/commit for the git repo
       default: ""
@@ -120,13 +120,32 @@ spec:
           value: $(tasks.git-clone.results.git-branch)
         - name: git-commit
           value: $(tasks.git-clone.results.git-commit)
+    - name: docker-lint
+      runAfter: [git-clone]
+      taskRef:
+        name: linter-docker-lint
+      params:
+        - name: path-to-dockerfile
+          value: $(params.path-to-dockerfile)
+        - name: dockerfile
+          value: $(params.dockerfile)
+        - name: fail-on-lint-errors
+          value: $(params.fail-on-lint-errors)
+        - name: pipeline-debug
+          value: $(params.pipeline-debug)
+      workspaces:
+        - name: workspace
+          workspace: pipeline-ws
     - name: build
       runAfter: [git-clone]
       taskRef:
         name: toolchain-build
       params:
         - name: custom-script
-          value: ""
+          value: |
+            echo "niklas"
+            cd code/service-catalog
+            mvn clean package"
         - name: pipeline-debug
           value: $(params.pipeline-debug)
       workspaces:
