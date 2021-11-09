@@ -126,7 +126,10 @@ spec:
         name: toolchain-build
       params:
         - name: custom-script
-          value: ""
+          value: |
+            echo "niklas"
+            cd code/service-catalog
+            mvn clean package
         - name: pipeline-debug
           value: $(params.pipeline-debug)
       workspaces:
