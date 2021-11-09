@@ -133,7 +133,7 @@ spec:
         - name: output
           workspace: pipeline-ws
     - name: unit-tests
-      runAfter: [docker-lint, build]
+      runAfter: [build]
       taskRef:
         name: tester-run-tests
       params:
