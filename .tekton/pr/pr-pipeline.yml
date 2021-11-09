@@ -67,7 +67,7 @@ spec:
         - name: pr-repository
           value: $(params.pr-repository)
         - name: pr-branch
-          value: $(params.pr-branch)
+          value: main
         - name: pr-revision
           value: $(params.pr-commit-id)
         - name: pipeline-debug
