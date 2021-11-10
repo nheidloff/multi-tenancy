@@ -47,7 +47,6 @@ services:
     parameters:
       services:
         - repo
-        - tekton-catalog-repo
       name: 'pr-pipeline'
       type: 'tekton'
       ui-pipeline: true
@@ -58,12 +57,7 @@ services:
           API_KEY: '{{form.pipeline.parameters.api-key}}'
           APP_NAME: "{{form.pipeline.parameters.app-name}}"
           APP_REPO: repo
-          APP_REPO_BRANCH: >
-            if ($env.template.info.hosted_region === "" || $env.sourceZipUrl) {
-              'main'
-            } else {
-              'main'
-            }
+          APP_REPO_BRANCH: 'main'
           ARTIFACTORY_DOCKER_CONFIG_JSON: '{{form.artifactoryComp.parameters.docker_config_json}}'
           GIT_COMMIT_EVENT_LISTENER_NAME: >
             if ( $env.source_provider === 'githubconsolidated' ) {
@@ -103,7 +97,6 @@ services:
               'master'
             }
         execute: false
-  build:
     service_id: pipeline
     parameters:
       services:
