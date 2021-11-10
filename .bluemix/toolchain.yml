@@ -64,28 +64,11 @@ services:
       has_issues: false
       enable_traceability: false
       kind: ['pipeline']
-  tekton-catalog-repo:
-    service_id: >
-      $env.source_provider ? $env.source_provider : 'hostedgit'
-    parameters:
-      repo_name: '{{toolchain.name}}-tekton-catalog'
-      repo_url:  >
-        if ($env.template.info.hosted_region === "") {
-          "https://github.com/open-toolchain/tekton-catalog"
-        } else {
-          "https://{{template.info.hosted_region}}.git.cloud.ibm.com/open-toolchain/tekton-catalog"
-        }
-      source_repo_url: $env.services.tekton-catalog-repo.parameters.repo_url
-      type: 'clone'
-      has_issues: false
-      enable_traceability: false
-      kind: ['pipeline']
   pr:
     service_id: 'pipeline'
     parameters:
       services:
         - repo
-        - tekton-catalog-repo
       name: 'pr-pipeline'
       type: 'tekton'
       ui-pipeline: true
@@ -133,13 +116,6 @@ services:
           PRIVATE_WORKER: '{{services.privateWorker.parameters.name}}'
           REGISTRY_REGION_ID: "{{form.pipeline.parameters.registry-region}}"
           REGISTRY_NAMESPACE: "{{form.pipeline.parameters.registry-namespace}}"
-          TEKTON_CATALOG_REPO: tekton-catalog-repo
-          TEKTON_CATALOG_REPO_BRANCH: >
-            if ($env.template.info.hosted_region === "") {
-              'master'
-            } else {
-              'main'
-            }
         execute: false
   build:
     service_id: pipeline
@@ -195,13 +171,6 @@ services:
           REGISTRY_NAMESPACE: '{{form.pipeline.parameters.registry-namespace}}'
           REGISTRY_REGION_ID: '{{form.pipeline.parameters.registry-region}}'
           SERVICE_BINDINGS: '{{form.pipeline.parameters.service-bindings}}'
-          TEKTON_CATALOG_REPO: tekton-catalog-repo
-          TEKTON_CATALOG_REPO_BRANCH: >
-            if ($env.template.info.hosted_region === "") {
-              'master'
-            } else {
-              'main'
-            }
         execute: 'manual-run'
   devops-insights:
       service_id: 'draservicebroker'
