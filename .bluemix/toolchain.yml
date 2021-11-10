@@ -2,8 +2,8 @@ version: '2'
 messages:
   $i18n: locales.yml
 template:
-  name: "Niklas Develop a Code Engine app"
-  description: "Niklas"
+  name: "Develop a Code Engine app"
+  description: "With this toolchain, you can develop and deploy a Code Engine application securely into a shared, multi-tenant Kubernetes cluster on IBM Cloud. By default, the toolchain uses a sample Node.js \"Hello World\" app, but you can link to your own GitHub repository instead. The toolchain is preconfigured for continuous delivery with [Vulnerability Advisor](https://cloud.ibm.com/docs/services/va?topic=va-va_index), source control, issue tracking, and online editing.\n\n You can manage your Code Engine projects and applications in the [console](https://cloud.ibm.com/codeengine/overview).\n\nThe toolchain uses tools that are part of the Continuous Delivery service. If an instance of that service isn't already in the selected resource group or organization, when you click **Create**, it is automatically added with the free [Lite](/catalog/services/continuous-delivery/) plan selected.\n\nTo get started, click **Create**."
   header: '![](toolchain.svg?localize)'
   icon: knative.svg
   required:
@@ -13,7 +13,8 @@ template:
     git url: >
       "[" + $env.repository + "](" + $env.repository + ")"
     git branch: >
-      "[main](" + $env.repository + "/tree/main" + ")"
+      "[" + $env.branch + "](" + $env.repository +
+          "/tree/" + $env.branch + ")"
     hosted_region: "" # this is set automatically by DevOps
 toolchain:
   name: $env.toolchainName || 'code-engine-toolchain-{{timestamp}}'
@@ -22,12 +23,33 @@ toolchain:
       $ref: "#/messages/template.gettingStarted"
 services:
   repo:
+    # must do logic this way instead of
+    # `service_id: $env.source_provider || 'hostedgit'`
+    # or source_provider doesn't work
     service_id: >
       $env.source_provider ? $env.source_provider : 'hostedgit'
     parameters:
       repo_name: '{{toolchain.name}}'
-      repo_url: 'https://github.com/nheidloff/multi-tenancy'
-      source_repo_url: 'https://github.com/nheidloff/multi-tenancy'
+      repo_url: >
+        if ($env.type === 'link') {
+          $env.app_repo
+        } else if ($env.sourceZipUrl) {
+          $env.sourceZipUrl
+        } else if ($env.template.info.hosted_region === "") {
+          'https://github.com/open-toolchain/hello-helm'
+        } else {
+          'https://{{template.info.hosted_region}}.git.cloud.ibm.com/open-toolchain/hello-helm'
+        }
+      source_repo_url: >
+        if ($env.type === 'fork' || $env.type === 'clone') {
+          $env.app_repo
+        } else if ($env.sourceZipUrl) {
+          $env.sourceZipUrl
+        } else if ($env.template.info.hosted_region === "") {
+          'https://github.com/open-toolchain/hello-helm'
+        } else {
+          'https://{{template.info.hosted_region}}.git.cloud.ibm.com/open-toolchain/hello-helm'
+        }
       type: $env.type || 'clone'
       has_issues: true
       enable_traceability: true
@@ -42,11 +64,28 @@ services:
       has_issues: false
       enable_traceability: false
       kind: ['pipeline']
+  tekton-catalog-repo:
+    service_id: >
+      $env.source_provider ? $env.source_provider : 'hostedgit'
+    parameters:
+      repo_name: '{{toolchain.name}}-tekton-catalog'
+      repo_url:  >
+        if ($env.template.info.hosted_region === "") {
+          "https://github.com/open-toolchain/tekton-catalog"
+        } else {
+          "https://{{template.info.hosted_region}}.git.cloud.ibm.com/open-toolchain/tekton-catalog"
+        }
+      source_repo_url: $env.services.tekton-catalog-repo.parameters.repo_url
+      type: 'clone'
+      has_issues: false
+      enable_traceability: false
+      kind: ['pipeline']
   pr:
     service_id: 'pipeline'
     parameters:
       services:
         - repo
+        - tekton-catalog-repo
       name: 'pr-pipeline'
       type: 'tekton'
       ui-pipeline: true
@@ -57,7 +96,12 @@ services:
           API_KEY: '{{form.pipeline.parameters.api-key}}'
           APP_NAME: "{{form.pipeline.parameters.app-name}}"
           APP_REPO: repo
-          APP_REPO_BRANCH: 'main'
+          APP_REPO_BRANCH: >
+            if ($env.template.info.hosted_region === "" || $env.sourceZipUrl) {
+              'master'
+            } else {
+              'main'
+            }
           ARTIFACTORY_DOCKER_CONFIG_JSON: '{{form.artifactoryComp.parameters.docker_config_json}}'
           GIT_COMMIT_EVENT_LISTENER_NAME: >
             if ( $env.source_provider === 'githubconsolidated' ) {
@@ -82,7 +126,7 @@ services:
             if ($env.branch) {
               $env.branch
             } else if ($env.template.info.hosted_region === "") {
-              'main'
+              'master'
             } else {
               'main'
             }
@@ -94,9 +138,10 @@ services:
             if ($env.template.info.hosted_region === "") {
               'master'
             } else {
-              'master'
+              'main'
             }
         execute: false
+  build:
     service_id: pipeline
     parameters:
       services:
@@ -113,7 +158,7 @@ services:
           APP_REPO: repo
           APP_REPO_BRANCH: >
             if ($env.template.info.hosted_region === "" || $env.sourceZipUrl) {
-              'main'
+              'master'
             } else {
               'main'
             }
@@ -143,7 +188,7 @@ services:
             if ($env.branch) {
               $env.branch
             } else if ($env.template.info.hosted_region === "") {
-              'main'
+              'master'
             } else {
               'main'
             }
@@ -153,7 +198,7 @@ services:
           TEKTON_CATALOG_REPO: tekton-catalog-repo
           TEKTON_CATALOG_REPO_BRANCH: >
             if ($env.template.info.hosted_region === "") {
-              'main'
+              'master'
             } else {
               'main'
             }
