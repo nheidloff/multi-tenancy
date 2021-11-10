@@ -17,7 +17,7 @@ template:
           "/tree/" + $env.branch + ")"
     hosted_region: "" # this is set automatically by DevOps
 toolchain:
-  name: $env.toolchainName || 'multi-tenancy-toolchain-{{timestamp}}'
+  name: $env.toolchainName || 'code-engine-toolchain-{{timestamp}}'
   template:
     getting_started:
       $ref: "#/messages/template.gettingStarted"
@@ -64,6 +64,7 @@ services:
       has_issues: false
       enable_traceability: false
       kind: ['pipeline']
+  pr:
     service_id: 'pipeline'
     parameters:
       services:
@@ -171,6 +172,8 @@ services:
           REGISTRY_REGION_ID: '{{form.pipeline.parameters.registry-region}}'
           SERVICE_BINDINGS: '{{form.pipeline.parameters.service-bindings}}'
         execute: 'manual-run'
+  devops-insights:
+      service_id: 'draservicebroker'
   webide:
     service_id: orion
 form:
