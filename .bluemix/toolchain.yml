@@ -69,12 +69,12 @@ services:
     parameters:
       services:
         - repo
-      name: 'ci-pipeline'
+      name: 'pipeline-backend'
       ui-pipeline: true
       type: 'tekton'
       configuration:
         content:
-          $text: tekton-pipeline-backend.yml
+          $text: config-pipeline-backend.yml
         env:
           API_KEY: '{{form.pipeline.parameters.api-key}}'
           APP_NAME: '{{form.pipeline.parameters.app-name}}'
