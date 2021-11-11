@@ -76,7 +76,7 @@ spec:
         name: code-engine-$(uid)
       spec:
         pipelineRef:
-          name: code-engine-pipeline
+          name: pipeline-backend
         params:
           - name: ibmcloud-api
             value: $(params.ibmcloud-api)
