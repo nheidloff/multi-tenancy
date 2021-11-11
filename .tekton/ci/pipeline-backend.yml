@@ -93,8 +93,6 @@ spec:
       taskRef:
         name: task-read-config
       params:
-        - name: ibmcloud-api
-          value: $(params.ibmcloud-api)
         - name: test-param
           value: test-niklas
       workspaces:
