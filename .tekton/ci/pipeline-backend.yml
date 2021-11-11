@@ -98,3 +98,4 @@ spec:
       workspaces:
         - name: output
           workspace: pipeline-ws
+      runAfter: [git-clone]
