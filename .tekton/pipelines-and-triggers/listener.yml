@@ -62,7 +62,7 @@ spec:
     - apiVersion: v1
       kind: PersistentVolumeClaim
       metadata:
-        name: code-engine-$(uid)-pvc
+        name: workspace-backend-$(uid)-pvc
       spec:
         resources:
           requests:
@@ -73,7 +73,7 @@ spec:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
-        name: code-engine-$(uid)
+        name: workspace-backend-$(uid)
       spec:
         pipelineRef:
           name: pipeline-backend
@@ -121,9 +121,9 @@ spec:
           - name: pipeline-debug
             value: $(params.pipeline-debug)
         workspaces:
-          - name: pipeline-ws
+          - name: workspace-backend
             persistentVolumeClaim:
-              claimName: code-engine-$(uid)-pvc
+              claimName: workspace-backend-$(uid)-pvc
 ---
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
