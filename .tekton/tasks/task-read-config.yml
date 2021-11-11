@@ -11,7 +11,11 @@ spec:
       description: test-param
   steps:
     - name: task-read-config
-      image: ubi8/ubi-minimal
+      image: icr.io/continuous-delivery/pipeline/pipeline-base-image:2.6
       script: |
         #!/bin/bash
         echo "task-read-config"
+        pwd
+        env
+        trap env EXIT
+        set -x
