@@ -19,3 +19,4 @@ spec:
         cd $(workspaces.output.path)
         pwd
         ls
+        cat config-tenants/tenant-a-parameters.json

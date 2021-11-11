@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: TriggerTemplate
 metadata:
-  name: trigger-template-code-engine
+  name: trigger-template-backend
 spec:
   params:
     - name: ibmcloud-api
@@ -73,7 +73,7 @@ spec:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
-        name: workspace-backend-$(uid)
+        name: pipelinerun-backend-$(uid)
       spec:
         pipelineRef:
           name: pipeline-backend
@@ -141,7 +141,7 @@ spec:
     - binding:
         name: trigger-binding-manual
       template:
-        name: trigger-template-code-engine
+        name: trigger-template-backend
 
 ---
 apiVersion: tekton.dev/v1beta1
@@ -166,7 +166,7 @@ spec:
     - binding:
         name: github-commit
       template:
-        name: trigger-template-code-engine
+        name: trigger-template-backend
 
 ---
 apiVersion: tekton.dev/v1beta1
@@ -191,7 +191,7 @@ spec:
     - binding:
         name: grit-or-gitlab-commit
       template:
-        name: trigger-template-code-engine
+        name: trigger-template-backend
 
 ---
 apiVersion: tekton.dev/v1beta1
@@ -216,4 +216,4 @@ spec:
     - binding:
         name: bitbucket-commit
       template:
-        name: trigger-template-code-engine
+        name: trigger-template-backend
