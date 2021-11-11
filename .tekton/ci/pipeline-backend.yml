@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: code-engine-pipeline
+  name: pipeline-backend
 spec:
   params:
     - name: ibmcloud-api
