@@ -3,6 +3,12 @@ kind: Task
 metadata:
   name: task-read-config
 spec:
+  workspaces:
+    - name: output
+      description: shared workspace  
+  params:
+  - name: test-param
+    description: test-param
   steps:
     - name: task-read-config
       image: ubi8/ubi-minimal
@@ -10,3 +16,4 @@ spec:
         #!/bin/bash
         echo "task-read-config"
         echo "Niklas"
+        echo $(params.test-param)
