@@ -14,8 +14,8 @@ spec:
       image: icr.io/continuous-delivery/pipeline/pipeline-base-image:2.6
       script: |
         #!/bin/bash
-        echo "task-read-config"
-        pwd
-        env
-        trap env EXIT
+        echo "task-read-config"        
         set -x
+        cd $(workspaces.output.path)
+        pwd
+        ls
