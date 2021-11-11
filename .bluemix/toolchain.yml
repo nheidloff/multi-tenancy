@@ -74,7 +74,7 @@ services:
       type: 'tekton'
       configuration:
         content:
-          $text: tekton-ci-pipeline.yml
+          $text: tekton-pipeline-backend.yml
         env:
           API_KEY: '{{form.pipeline.parameters.api-key}}'
           APP_NAME: '{{form.pipeline.parameters.app-name}}'
