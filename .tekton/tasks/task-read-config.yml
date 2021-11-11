@@ -10,4 +10,3 @@ spec:
         #!/bin/bash
         echo "task-read-config"
         echo "Niklas"
-        echo $(params.test-param)
