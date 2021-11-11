@@ -102,8 +102,6 @@ services:
           REGISTRY_REGION_ID: '{{form.pipeline.parameters.registry-region}}'
           SERVICE_BINDINGS: '{{form.pipeline.parameters.service-bindings}}'
         execute: 'manual-run'
-  devops-insights:
-      service_id: 'draservicebroker'
   webide:
     service_id: orion
 form:

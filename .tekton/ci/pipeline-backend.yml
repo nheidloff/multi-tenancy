@@ -65,7 +65,6 @@ spec:
         name: toolchain-extract-value
       params:
         - name: expression
-          # if a params.repository is given, it takes precedence
           value: '. as $toolchain | ["$(params.repository)"] | if .[0]=="" then $toolchain | .services[] | select(.toolchain_binding.name=="repo") | .dashboard_url else .[0] end'
         - name: pipeline-debug
           value: $(params.pipeline-debug)
@@ -87,6 +86,17 @@ spec:
           value: $(params.revision)
         - name: pipeline-debug
           value: $(params.pipeline-debug)
+      workspaces:
+        - name: output
+          workspace: pipeline-ws
+    - name: task-read-config
+      taskRef:
+        name: task-read-config
+      params:
+        - name: ibmcloud-api
+          value: $(params.ibmcloud-api)
+        - name: test-param
+          value: test-niklas
       workspaces:
         - name: output
           workspace: pipeline-ws

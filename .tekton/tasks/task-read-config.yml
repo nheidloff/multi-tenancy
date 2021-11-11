@@ -1,0 +1,13 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: task-read-config
+spec:
+  steps:
+    - name: task-read-config
+      image: ubi8/ubi-minimal
+      script: |
+        #!/bin/bash
+        echo "task-read-config"
+        echo "Niklas"
+        echo $(params.test-param)
