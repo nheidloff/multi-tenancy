@@ -58,7 +58,7 @@ spec:
       description: Pipeline debug mode. Value can be 0 or 1. Default to 0
       default: "0"
   workspaces:
-    - name: pipeline-ws
+    - name: workspace-backend
   tasks:
     - name: extract-repository-url
       taskRef:
@@ -68,7 +68,7 @@ spec:
           value: '. as $toolchain | ["$(params.repository)"] | if .[0]=="" then $toolchain | .services[] | select(.toolchain_binding.name=="repo") | .dashboard_url else .[0] end'
         - name: pipeline-debug
           value: $(params.pipeline-debug)
-    - name: git-clone
+    - name: git-clone-repo
       taskRef:
         name: git-clone-repo
       params:
@@ -88,14 +88,14 @@ spec:
           value: $(params.pipeline-debug)
       workspaces:
         - name: output
-          workspace: pipeline-ws
-    - name: task-read-config
+          workspace: workspace-backend
+    - name: read-config
       taskRef:
-        name: task-read-config
+        name: read-config
       params:
         - name: test-param
           value: test-niklas
       workspaces:
         - name: output
-          workspace: pipeline-ws
-      runAfter: [git-clone]
+          workspace: workspace-backend
+      runAfter: [git-clone-repo]
