@@ -7,13 +7,11 @@ spec:
     - name: output
       description: shared workspace  
   params:
-  - name: test-param
-    description: test-param
+    - name: test-param
+      description: test-param
   steps:
     - name: task-read-config
       image: ubi8/ubi-minimal
       script: |
         #!/bin/bash
         echo "task-read-config"
-        echo "Niklas"
-        echo $(params.test-param)
